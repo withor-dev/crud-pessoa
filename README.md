@@ -1,6 +1,6 @@
 # 👥 Gestão de Pessoas - Full-Stack CRUD
 
-Este projeto é uma aplicação Full-Stack para cadastro e gestão de pessoas, construída com foco em **Clean Architecture, Componentização, Design Patterns e facilidade de execução**. 
+Este projeto é uma aplicação Full-Stack para cadastro e gestão de pessoas, construída com foco em **Clean Architecture, Componentização, Design Patterns e facilidade de execução**.
 
 Ele serve como uma demonstração técnica de uma arquitetura moderna, escalável e pronta para produção.
 
@@ -11,30 +11,33 @@ Ele serve como uma demonstração técnica de uma arquitetura moderna, escaláve
 O projeto foi construído utilizando o "estado da arte" das ferramentas do ecossistema JavaScript/TypeScript:
 
 ### Back-end (API REST / BFF)
-* **Framework:** [NestJS](https://nestjs.com/) (Node.js + TypeScript).
-* **Banco de Dados:** PostgreSQL.
-* **ORM:** [Prisma ORM](https://www.prisma.io/) (Garantindo tipagem estrita de ponta a ponta).
-* **Validação:** `class-validator` e `class-transformer` (Com algoritmo customizado para validação matemática de CPF e proteção contra *Mass Assignment*).
-* **Tratamento de Erros:** Filtros de exceção globais (`ExceptionFilter`) para padronizar as respostas de erro HTTP.
+
+- **Framework:** [NestJS](https://nestjs.com/) (Node.js + TypeScript).
+- **Banco de Dados:** PostgreSQL.
+- **ORM:** [Prisma ORM](https://www.prisma.io/) (Garantindo tipagem estrita de ponta a ponta).
+- **Validação:** `class-validator` e `class-transformer` (Com algoritmo customizado para validação matemática de CPF e proteção contra _Mass Assignment_).
+- **Tratamento de Erros:** Filtros de exceção globais (`ExceptionFilter`) para padronizar as respostas de erro HTTP.
 
 ### Front-end (SPA)
-* **Framework:** [Vue.js 3](https://vuejs.org/) (Composition API / `<script setup>`) inicializado via [Vite](https://vitejs.dev/).
-* **Roteamento:** Vue Router v4 (Garantindo suporte a *Deep Linking* e URLs independentes).
-* **Gerenciamento de Estado:** Pinia (Setup Syntax).
-* **Estilização:** Tailwind CSS v4 (Design responsivo e focado em utilitários, sem CSS morto).
-* **Cliente HTTP:** Axios com *Interceptors* globais para captura e tratamento centralizado de erros da API.
+
+- **Framework:** [Vue.js 3](https://vuejs.org/) (Composition API / `<script setup>`) inicializado via [Vite](https://vitejs.dev/).
+- **Roteamento:** Vue Router v4 (Garantindo suporte a _Deep Linking_ e URLs independentes).
+- **Gerenciamento de Estado:** Pinia (Setup Syntax).
+- **Estilização:** Tailwind CSS v4 (Design responsivo e focado em utilitários, sem CSS morto).
+- **Cliente HTTP:** Axios com _Interceptors_ globais para captura e tratamento centralizado de erros da API.
 
 ### Infraestrutura
-* **Docker & Docker Compose** (Provisionamento automatizado do banco de dados).
+
+- **Docker & Docker Compose** (Provisionamento automatizado do banco de dados).
 
 ---
 
 ## ⚙️ Decisões Arquiteturais e Boas Práticas
 
-1. **BFF (Backend for Frontend):** O backend não retorna erros "crus" do banco de dados. Ele intercepta as exceções (ex: E-mail ou CPF duplicados) e formata um *payload* padronizado contendo um array de `messages`, facilitando o consumo e a exibição de alertas pelo Front-end.
+1. **BFF (Backend for Frontend):** O backend não retorna erros "crus" do banco de dados. Ele intercepta as exceções (ex: E-mail ou CPF duplicados) e formata um _payload_ padronizado contendo um array de `messages`, facilitando o consumo e a exibição de alertas pelo Front-end.
 2. **Navegação Dinâmica (Deep Linking):** Em vez de utilizar modais ou renderização condicional simples, o CRUD foi dividido em rotas (`/` para listagem e `/editar/:id` para edição). Isso permite o compartilhamento de URLs diretas, essencial para sistemas corporativos e arquiteturas de Microfrontends.
-3. **Reusabilidade de Componentes:** O formulário de cadastro (`PersonForm.vue`) compartilha exatamente a mesma estrutura para as operações de **Criação (POST)** e **Edição (PATCH)** aplicando o conceito de *Data Down, Actions Up*.
-4. **Segurança no Payload:** O backend utiliza validação com `forbidNonWhitelisted: true`, rejeitando qualquer requisição que tente injetar dados sensíveis (como IDs ou datas de criação) durante a atualização (*Mass Assignment*).
+3. **Reusabilidade de Componentes:** O formulário de cadastro (`PersonForm.vue`) compartilha exatamente a mesma estrutura para as operações de **Criação (POST)** e **Edição (PATCH)** aplicando o conceito de _Data Down, Actions Up_.
+4. **Segurança no Payload:** O backend utiliza validação com `forbidNonWhitelisted: true`, rejeitando qualquer requisição que tente injetar dados sensíveis (como IDs ou datas de criação) durante a atualização (_Mass Assignment_).
 
 ---
 
@@ -47,3 +50,76 @@ O projeto adota uma estrutura consolidada para facilitar a avaliação, dividida
  ├── 📁 backend/       # API NestJS
  ├── 📁 frontend/      # SPA Vue 3
  └── 📄 README.md      # Documentação central
+```
+
+## 🛠️ Como executar o projeto localmente
+
+Siga o passo a passo abaixo para configurar e rodar a aplicação completa (Back-end, Banco de Dados e Front-end).
+
+### 1. Pré-requisitos
+
+Antes de começar, você vai precisar ter instalado:
+
+- [Node.js](https://nodejs.org/) (Recomendado v18 ou superior)
+- [Docker](https://www.docker.com/) e Docker Compose
+
+---
+
+### 2. Configurando o Back-end (API NestJS)
+
+1. **Abra o terminal e navegue até a pasta do servidor e instale as dependências:**
+
+```bash
+cd backend
+npm install
+```
+
+2. **Configure as variáveis de ambiente:**
+
+- Renomeie o arquivo .env.example para .env.
+- Certifique-se de que a DATABASE_URL aponta para o container Docker.
+
+3. **Suba o banco de dados PostgreSQL via Docker:**
+
+```bash
+docker-compose up -d
+```
+
+4. **Gere o Prisma Client e execute as Migrations do Prisma (Isso criará as tabelas no banco):**
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+5. **Inicie o servidor de desenvolvimento:**
+
+```bash
+npm run start:dev
+```
+
+_A API estará rodando em: http://localhost:3000_
+
+---
+
+### 3. Configurando o Front-end (Vue 3)
+
+1. **Abra um novo terminal na raiz do projeto, navegue até a pasta do cliente e instale as dependências:**
+
+```bash
+cd frontend
+npm install
+```
+
+2. **Configure as variáveis de ambiente:**
+
+- Renomeie o arquivo .env.example para .env.
+- Verifique se a variável VITE_API_URL está definida como http://localhost:3000.
+
+3. **Inicie o servidor de desenvolvimento (Vite):**
+
+```bash
+npm run dev
+```
+
+_O Front-end estará disponível em: http://localhost:5173_
