@@ -52,6 +52,8 @@ O projeto adota uma estrutura consolidada para facilitar a avaliação, dividida
  └── 📄 README.md      # Documentação central
 ```
 
+---
+
 ## 🛠️ Como executar o projeto localmente
 
 Siga o passo a passo abaixo para configurar e rodar a aplicação completa (Back-end, Banco de Dados e Front-end).
@@ -62,8 +64,6 @@ Antes de começar, você vai precisar ter instalado:
 
 - [Node.js](https://nodejs.org/) (Recomendado v18 ou superior)
 - [Docker](https://www.docker.com/) e Docker Compose
-
----
 
 ### 2. Configurando o Back-end (API NestJS)
 
@@ -99,8 +99,6 @@ npm run start:dev
 ```
 
 _A API estará rodando em: http://localhost:3000_
-
----
 
 ### 3. Configurando o Front-end (Vue 3)
 
